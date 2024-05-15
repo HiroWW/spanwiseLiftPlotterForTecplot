@@ -1,0 +1,54 @@
+#!MC 1410
+$!ReadDataSet  '"C:\Users\fujiwara\Downloads\sigmoid_ver2.plt" '
+  ReadDataOption = New
+  ResetStyle = Yes
+  VarLoadMode = ByName
+  AssignStrandIDs = Yes
+  VarNameList = '"X" "Y" "Z" "rho" "u" "v" "w" "p" "q_criterion" "domainid"'
+$!GlobalRGB RedChannelVar = 4
+$!GlobalRGB GreenChannelVar = 4
+$!GlobalRGB BlueChannelVar = 4
+$!SetContourVar 
+  Var = 4
+  ContourGroup = 1
+  LevelInitMode = ResetToNice
+$!SetContourVar 
+  Var = 8
+  ContourGroup = 2
+  LevelInitMode = ResetToNice
+$!SetContourVar 
+  Var = 9
+  ContourGroup = 3
+  LevelInitMode = ResetToNice
+$!SetContourVar 
+  Var = 10
+  ContourGroup = 4
+  LevelInitMode = ResetToNice
+$!SetContourVar 
+  Var = 4
+  ContourGroup = 5
+  LevelInitMode = ResetToNice
+$!SetContourVar 
+  Var = 4
+  ContourGroup = 6
+  LevelInitMode = ResetToNice
+$!SetContourVar 
+  Var = 4
+  ContourGroup = 7
+  LevelInitMode = ResetToNice
+$!SetContourVar 
+  Var = 4
+  ContourGroup = 8
+  LevelInitMode = ResetToNice
+$!FieldLayers ShowContour = Yes
+$!SliceLayers Show = Yes
+$!RedrawAll 
+$!ThreeDView ViewerPosition{X = 2144.64091518326177}
+$!ThreeDView ViewerPosition{Y = -2.4500821932659761E-13}
+$!ThreeDView ViewerPosition{Z = 1.31321381604981581E-13}
+$!ThreeDView PSIAngle = 90
+$!ThreeDView ThetaAngle = -90
+$!RedrawAll 
+$!ExportSetup ExportFName = '\\wsl$\Ubuntu\home\hiroaki\spanwiseLiftPlotterForTecplot\records\test3.png'
+$!Export 
+  ExportRegion = AllFrames

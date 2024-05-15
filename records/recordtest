@@ -1,0 +1,23 @@
+#!MC 1410
+$!XYLineAxis 
+  XDetail 1
+    {
+    RangeMin = -0.41200738457687435812
+    RangeMax = 1.5125501258419906669
+    }
+  YDetail 1
+    {
+    RangeMin = -1.0699499170443802498
+    RangeMax = 0.7065366417520149156
+    }
+$!XYLineAxis 
+  XDetail 1
+    {
+    RangeMin = -0.59602881983604938387
+    RangeMax = 1.3285286905828170845
+    }
+  YDetail 1
+    {
+    RangeMin = -1.0458216135475078001
+    RangeMax = 0.73066494524888736528
+    }
