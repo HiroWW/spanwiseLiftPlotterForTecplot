@@ -1,60 +1,29 @@
-import tecplot as tp
-from tecplot.constant import PlotType, ValueLocation
+import os
+import sys
+import logging
 
-# Tecplot 360セッションの開始とデータのロード
-tp.session.connect()
-dataset = tp.data.load_tecplot('test.plt')
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-# 必要な変数の選択
-x = dataset.variable('X')
-y = dataset.variable('Y')
-cp = dataset.variable('CP')  # 圧力変数
+import tecplot
 
-# # 新しい変数 'Cp' を追加
-# cp = dataset.add_variable('Cp')
+# Run this script with "-c" to connect to Tecplot 360 on port 7600
+# To enable connections in Tecplot 360, click on:
+#   "Scripting" -> "PyTecplot Connections..." -> "Accept connections"
+import sys
+if '-c' in sys.argv:
+    tecplot.session.connect()
 
-# # Cpの計算式を設定
-# cp_formula = '({} - 1 / 1.4) / (0.5 * 1 * 0.2 * 0.2)'.format(p.name)
-# cp.equation = cp_formula  # 正しいプロパティへの計算式の設定
 
-# スパン方向の分割設定
-spanwise_slices = 10  # スパン方向のスライス数
+examples_dir = tecplot.session.tecplot_examples_directory()
+datafile = os.path.join(examples_dir, 'OneraM6wing', 'OneraM6_SU2_RANS.plt')
+dataset = tecplot.data.load_tecplot(datafile)
 
-# スパン方向の全範囲を取得
-y_min, y_max = y.values().min(), y.values().max()
+frame = tecplot.active_frame()
+frame.plot_type = tecplot.constant.PlotType.Cartesian3D
+frame.plot().show_contour = True
 
-# スライス間の距離を計算
-slice_width = (y_max - y_min) / spanwise_slices
+# ensure consistent output between interactive (connected) and batch
+frame.plot().contour(0).levels.reset_to_nice()
 
-# 各スライスでのCLの計算
-cl_values = []
-spanwise_positions = []
-
-for i in range(spanwise_slices):
-    y_start = y_min + i * slice_width
-    y_end = y_start + slice_width
-    spanwise_positions.append((y_start + y_end) / 2)
-
-    # 範囲に基づいてスライスを作成
-    with tp.session.suspend():
-        slice = dataset.slice((1, y_start, y_end), plot_type=PlotType.XYLine)
-    
-    # Cpを積分してClを計算
-    slice.activate()
-    cl = tp.data.query_integral(cp, direction='X', zone=slice)
-    cl_values.append(cl)
-
-# 揚力分布のプロット
-tp.new_layout()
-frame = tp.active_frame()
-plot = frame.plot(PlotType.XYLine)
-line_map = plot.add_xy_line(y=spanwise_positions, x=cl_values)
-
-# 軸の設定
-plot.axes.y_axis.variable = cp
-plot.axes.x_axis.variable = dataset.variable('Spanwise Position')
-
-# プロットの保存
-plot.save('spanwise_lift_distribution.png')
-
-tp.session.disconnect()
+# export image of wing
+tecplot.export.save_png('wing.png', 600, supersample=3)
