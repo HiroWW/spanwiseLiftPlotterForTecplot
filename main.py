@@ -45,6 +45,7 @@ for span in span_array:
     tp.active_frame().plot().contour(6).variable_index = 3
     tp.active_frame().plot().contour(7).variable_index = 3
     tp.active_frame().plot(PlotType.Cartesian3D).show_slices = True
+    tp.active_frame().plot().slice(0).orientation=SliceSurface.XPlanes
     tp.active_frame().plot().slice(0).origin.x = span
     tp.active_frame().plot().slices(0).extract(transient_mode=TransientOperationMode.AllSolutionTimes)
     
