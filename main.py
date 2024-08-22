@@ -69,7 +69,7 @@ for span in span_array:
     plt.clf()
     plt.plot(x, y)
     
-    area = 0.5 * np.abs(np.dot(x, np.roll(y, 1)) - np.dot(y, np.roll(x, 1)))
+    area = 0.5 * (- np.dot(x, np.roll(y, 1)) + np.dot(y, np.roll(x, 1)))
     print(f"Closed curve area: {area}")
     cl_array.append(area)
     print("END AREA CALCULATION")
