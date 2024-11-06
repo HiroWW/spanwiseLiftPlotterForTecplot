@@ -14,12 +14,14 @@ user_path = "C:\\Users\\YourUsername\\hogehoge\\"  # Update this path by yoursel
 # Compute midpoints for each section
 r_R = np.linspace(start, end, n+1)
 r_R_centers = (r_R[:-1] + r_R[1:]) / 2
+# Convert r_R to r in STL dimension
+# ex) In this case, R = 1/0.202 in stl.
 span_array = r_R_centers * (1/0.202)
 
 cl_array = []
 
 for span in span_array:
-    print("CURRENT SPAN: ", span * 0.202)
+    print("CURRENT r/R : ", span * 0.202)
     
     tp.macro.execute_command(f"""
         $!ReadDataSet  '{user_path}surfave.plt'
@@ -62,15 +64,19 @@ for span in span_array:
     
     slice_data = np.loadtxt(output_file, skiprows=8)
     x = slice_data[:, 0]
+    # convert x to 0.0 ~ 1.0 range
     x = x / (np.max(x) - np.min(x)) 
     x = x - np.min(x)
-    y = slice_data[:, 1] * (1.0 / (0.03514 * span))**2
+    # y is Cp (pressurce coefficient)
+    # y = slice_data[:, 1] * (1.0 / (0.03514 * span))**2
+    y = slice_data[:, 1]
     
     plt.clf()
     plt.plot(x, y)
-    
+    # calc the area inside the cp-r line  
     area = 0.5 * (- np.dot(x, np.roll(y, 1)) + np.dot(y, np.roll(x, 1)))
     print(f"Closed curve area: {area}")
+
     cl_array.append(area)
     print("END AREA CALCULATION")
 
